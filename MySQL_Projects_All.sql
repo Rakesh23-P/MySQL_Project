@@ -50,7 +50,41 @@ CREATE TABLE `accounts` (
 
 LOCK TABLES `accounts` WRITE;
 /*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
+INSERT INTO `accounts` VALUES (101,1,2,'ACC1000001','SAVINGS',43500.00,1000.00,'2025-01-15','ACTIVE','INR'),(102,2,2,'ACC1000002','SAVINGS',25750.00,1000.00,'2025-02-20','ACTIVE','INR'),(103,3,3,'ACC1000003','CURRENT',75000.00,5000.00,'2025-03-10','ACTIVE','INR'),(104,4,4,'ACC1000004','SAVINGS',62000.00,1000.00,'2025-04-05','ACTIVE','INR'),(105,5,5,'ACC1000005','SALARY',45000.00,0.00,'2025-05-12','ACTIVE','INR');
 /*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `beneficiaries`
+--
+
+DROP TABLE IF EXISTS `beneficiaries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `beneficiaries` (
+  `beneficiary_id` int NOT NULL,
+  `customer_id` int NOT NULL,
+  `beneficiary_name` varchar(100) NOT NULL,
+  `account_number` varchar(30) NOT NULL,
+  `bank_name` varchar(100) DEFAULT NULL,
+  `ifsc_code` varchar(20) DEFAULT NULL,
+  `nickname` varchar(50) DEFAULT NULL,
+  `added_date` date DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`beneficiary_id`),
+  KEY `customer_id` (`customer_id`),
+  CONSTRAINT `beneficiaries_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `beneficiaries`
+--
+
+LOCK TABLES `beneficiaries` WRITE;
+/*!40000 ALTER TABLE `beneficiaries` DISABLE KEYS */;
+INSERT INTO `beneficiaries` VALUES (1,1,'Rahul Sharma','BENACC10001','State Bank of India','SBIN0001234','Rahul','2025-06-01','ACTIVE'),(2,1,'Amit Verma','BENACC10002','Punjab National Bank','PUNB0001234','Amit','2025-06-05','ACTIVE'),(3,2,'Priya Singh','BENACC10003','HDFC Bank','HDFC0001234','Priya','2025-06-10','ACTIVE'),(4,2,'Neha Gupta','BENACC10004','ICICI Bank','ICIC0001234','Neha','2025-06-15','ACTIVE'),(5,3,'Vikas Yadav','BENACC10005','Bank of Baroda','BARB0001234','Vikas','2025-06-20','ACTIVE'),(6,4,'Ankit Singh','BENACC10006','Canara Bank','CNRB0001234','Ankit','2025-07-01','ACTIVE'),(7,5,'Pooja Mishra','BENACC10007','Axis Bank','UTIB0001234','Pooja','2025-07-05','ACTIVE'),(8,6,'Rohit Kumar','BENACC10008','State Bank of India','SBIN0005678','Rohit','2025-07-10','ACTIVE'),(9,7,'Sneha Patel','BENACC10009','HDFC Bank','HDFC0005678','Sneha','2025-07-15','ACTIVE'),(10,8,'Karan Mehta','BENACC10010','ICICI Bank','ICIC0005678','Karan','2025-07-20','ACTIVE');
+/*!40000 ALTER TABLE `beneficiaries` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -87,6 +121,43 @@ LOCK TABLES `branches` WRITE;
 /*!40000 ALTER TABLE `branches` DISABLE KEYS */;
 INSERT INTO `branches` VALUES (2,'SBI2','BKT','Lucknow','UP','226201','near SRGI','SBI002','6463954583','Amit','2021-02-02','ACTIVE'),(3,'SBI3','Bithauli','Lucknow','UP','226200','near OYO','SBI003','9463954909','Arif','2025-04-08','ACTIVE'),(4,'PNB1','Baikunthpur Kothi','kushinagar','UP','228401','near Padrauna','PNB001','6396963156','Naviz','2026-02-02','ACTIVE'),(5,'CBI2','Nonar','Deoria','UP','274701','near Bhatpar Rani','CBI001','6465698695','Arif','2001-05-01','ACTIVE');
 /*!40000 ALTER TABLE `branches` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cards`
+--
+
+DROP TABLE IF EXISTS `cards`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cards` (
+  `card_id` int NOT NULL,
+  `customer_id` int NOT NULL,
+  `account_id` int DEFAULT NULL,
+  `card_number` varchar(20) NOT NULL,
+  `card_type` varchar(20) DEFAULT NULL,
+  `card_network` varchar(20) DEFAULT NULL,
+  `issue_date` date DEFAULT NULL,
+  `expiry_date` date DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `credit_limit` decimal(15,2) DEFAULT NULL,
+  PRIMARY KEY (`card_id`),
+  UNIQUE KEY `card_number` (`card_number`),
+  KEY `customer_id` (`customer_id`),
+  KEY `account_id` (`account_id`),
+  CONSTRAINT `cards_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`),
+  CONSTRAINT `cards_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cards`
+--
+
+LOCK TABLES `cards` WRITE;
+/*!40000 ALTER TABLE `cards` DISABLE KEYS */;
+INSERT INTO `cards` VALUES (1,1,101,'XXXX-XXXX-0001','DEBIT','VISA','2025-01-20','2030-01-31','ACTIVE',0.00),(2,2,102,'XXXX-XXXX-0002','DEBIT','MASTERCARD','2025-02-25','2030-02-28','ACTIVE',0.00),(3,3,103,'XXXX-XXXX-0003','CREDIT','VISA','2025-03-15','2030-03-31','ACTIVE',100000.00),(4,4,104,'XXXX-XXXX-0004','DEBIT','RUPAY','2025-04-10','2030-04-30','ACTIVE',0.00),(5,5,105,'XXXX-XXXX-0005','DEBIT','VISA','2025-05-15','2030-05-31','ACTIVE',0.00);
+/*!40000 ALTER TABLE `cards` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -319,6 +390,78 @@ LOCK TABLES `studentdetails` WRITE;
 INSERT INTO `studentdetails` VALUES (102,'RR','Lucknow'),(2001,'Aman','Rampur'),(2002,'Raja','Kanpur'),(2301,'Rakesh Patel','Jaunpur'),(2302,'Abhishek Dubey','Jaunpur'),(2303,'Akhilesh Kumar','Ghazipur'),(2304,'Rohan Yadav','Deoria'),(2305,'Vikhyat Mishra','Deoria'),(5001,'Ram','Ayodhya');
 /*!40000 ALTER TABLE `studentdetails` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `transactions`
+--
+
+DROP TABLE IF EXISTS `transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `transactions` (
+  `transaction_id` bigint NOT NULL,
+  `account_id` int NOT NULL,
+  `transaction_type` varchar(30) NOT NULL,
+  `transaction_mode` varchar(30) NOT NULL,
+  `amount` decimal(15,2) NOT NULL,
+  `transaction_date` datetime NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `reference_number` varchar(50) DEFAULT NULL,
+  `balance_after` decimal(15,2) DEFAULT NULL,
+  `transaction_status` varchar(20) DEFAULT NULL,
+  `location` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`transaction_id`),
+  UNIQUE KEY `reference_number` (`reference_number`),
+  KEY `account_id` (`account_id`),
+  CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transactions`
+--
+
+LOCK TABLES `transactions` WRITE;
+/*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
+INSERT INTO `transactions` VALUES (1001,101,'DEPOSIT','BRANCH',50000.00,'2026-01-10 10:30:00','Cash deposit','REF100001',50000.00,'SUCCESS','Lucknow'),(1002,101,'PAYMENT','UPI',1500.00,'2026-01-10 14:20:00','UPI payment','REF100002',48500.00,'SUCCESS','Lucknow'),(1003,101,'WITHDRAWAL','ATM',5000.00,'2026-01-11 09:15:00','ATM cash withdrawal','REF100003',43500.00,'SUCCESS','Lucknow'),(1004,102,'TRANSFER','NEFT',10000.00,'2026-01-11 12:00:00','NEFT transfer','REF100004',25000.00,'SUCCESS','Lucknow'),(1005,102,'REFUND','UPI',750.00,'2026-01-12 16:45:00','UPI refund','REF100005',25750.00,'SUCCESS','Lucknow');
+/*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transfers`
+--
+
+DROP TABLE IF EXISTS `transfers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `transfers` (
+  `transfer_id` bigint NOT NULL,
+  `sender_account_id` int NOT NULL,
+  `receiver_account_id` int NOT NULL,
+  `amount` decimal(15,2) NOT NULL,
+  `transfer_mode` varchar(30) DEFAULT NULL,
+  `transfer_date` datetime DEFAULT NULL,
+  `reference_number` varchar(50) DEFAULT NULL,
+  `transfer_status` varchar(20) DEFAULT NULL,
+  `remarks` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`transfer_id`),
+  UNIQUE KEY `reference_number` (`reference_number`),
+  KEY `sender_account_id` (`sender_account_id`),
+  KEY `receiver_account_id` (`receiver_account_id`),
+  CONSTRAINT `transfers_ibfk_1` FOREIGN KEY (`sender_account_id`) REFERENCES `accounts` (`account_id`),
+  CONSTRAINT `transfers_ibfk_2` FOREIGN KEY (`receiver_account_id`) REFERENCES `accounts` (`account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transfers`
+--
+
+LOCK TABLES `transfers` WRITE;
+/*!40000 ALTER TABLE `transfers` DISABLE KEYS */;
+INSERT INTO `transfers` VALUES (2001,101,102,5000.00,'UPI','2026-01-13 10:15:00','TRF100001','SUCCESS','Payment transfer'),(2002,102,103,7500.00,'NEFT','2026-01-13 11:30:00','TRF100002','SUCCESS','Fund transfer'),(2003,103,104,12000.00,'IMPS','2026-01-14 09:45:00','TRF100003','SUCCESS','Urgent transfer'),(2004,104,105,8500.00,'RTGS','2026-01-14 14:20:00','TRF100004','SUCCESS','Business payment'),(2005,105,101,3000.00,'UPI','2026-01-15 16:10:00','TRF100005','PENDING','Transfer pending'),(2006,101,103,2500.00,'IMPS','2026-01-16 12:05:00','TRF100006','FAILED','Transaction failed'),(2007,102,104,6000.00,'NEFT','2026-01-17 13:40:00','TRF100007','SUCCESS','Monthly transfer'),(2008,103,105,15000.00,'RTGS','2026-01-18 15:30:00','TRF100008','SUCCESS','Large value transfer');
+/*!40000 ALTER TABLE `transfers` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -329,4 +472,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-09-13  0:50:53
+-- Dump completed on 2026-09-13  1:16:53
